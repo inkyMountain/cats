@@ -1,0 +1,9 @@
+@mixin PC {
+  .home-container {
+    background-color: lightcoral;
+  }
+}
+
+@media (max-width: 520px) {
+  @include PC;
+}

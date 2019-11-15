@@ -1,0 +1,10 @@
+/*
+  公共样式
+*/
+.home-container {
+  height: 100%;
+  width: 100%;
+}
+
+@import "./mobile.scss";
+@import "./PC.scss" (min-width: 520px);
