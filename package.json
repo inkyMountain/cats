@@ -48,6 +48,5 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.2"
-  },
-  "homepage": "http://172.31.11.117:8080/build"
+  }
 }
