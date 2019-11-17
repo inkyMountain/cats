@@ -1,17 +1,18 @@
 type SearchParams = {
-  mime_types?: ["jpg"?, "png"?, "gif"?];
+  mime_types?: string;
   limit?: number;
   page?: number;
   format?: "json" | "src";
   breed_id?: string;
   order?: "RANDOM" | "DESC" | "ASC";
+  type?: "small" | "med" | "full";
 };
 
-type CatUrl = {
+type Cat = {
   id: string;
   url: string;
   height: number;
   width: number;
 };
 
-type CatUrls = [CatUrl];
+type Cats = [Cat];

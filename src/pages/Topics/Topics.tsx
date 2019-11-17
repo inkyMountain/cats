@@ -6,7 +6,6 @@ import {
   useRouteMatch,
   useParams
 } from "react-router-dom";
-import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { person, array } from "../../store/index";
 
