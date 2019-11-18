@@ -4,6 +4,6 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (min-width: 520px) {
   @include PC;
 }
