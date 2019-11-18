@@ -13,6 +13,12 @@ type Cat = {
   url: string;
   height: number;
   width: number;
+  breeds: [string];
+};
+
+type Dog = {
+  message: [string];
+  status: string;
 };
 
 type Cats = [Cat];

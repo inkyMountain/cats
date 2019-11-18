@@ -1,0 +1,7 @@
+@mixin PC {
+  
+}
+
+@media (min-width: 520px) {
+  @include PC;
+}

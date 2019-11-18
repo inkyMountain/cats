@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useRouteMatch,
-  useParams
-} from "react-router-dom";
+import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { person, array } from "../../store/index";
 
