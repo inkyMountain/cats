@@ -1,8 +1,4 @@
 @mixin mobile {
-  .home-container {
-    background-color: lightskyblue;
-  }
-
   .swiper-container,
   .swiper-wrapper,
   .swiper-slide,
@@ -13,9 +9,12 @@
 
   .home-container {
     overflow: auto;
+    position: relative;
+    z-index: 0;
   }
 
   .swiper-container {
+    z-index: -1;
     .swiper-slide {
       position: relative;
       z-index: 0;
@@ -35,6 +34,42 @@
         border-radius: 20px;
       }
     }
+  }
+
+  .category {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: white;
+    transition: transform 300ms ease-out;
+    font-size: 100px;
+    &.open {
+      transform: translate(0);
+    }
+    &.close {
+      transform: translate(-100%);
+    }
+  }
+
+  $switcher-size: 35px;
+  .category-switcher {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $switcher-size;
+    height: $switcher-size;
+    border-radius: 50%;
+    font-size: 40px;
+    background-color: whitesmoke;
   }
 }
 
