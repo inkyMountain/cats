@@ -127,6 +127,7 @@ const Home = observer(() => {
       <div className="swiper-container">
         <div className="swiper-wrapper">{renderSlides(urls)}</div>
       </div>
+
       <div className={`category ${isCategoryOpen ? "open" : "close"}`}>
         <CategoryButton
           icon="icon-maomao"
