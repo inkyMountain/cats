@@ -87,10 +87,12 @@ const Home = observer(() => {
   async function changeTypeTo(newType: string) {
     setIsTypeOpen(false);
     type = newType;
+    setLoadingVisible(true);
     const urls = await getAnimalUrls(newType);
     setUrls(urls);
     swiper.slideTo(0, 0);
     swiper.update();
+    setLoadingVisible(false);
   }
 
   useEffect(() => {

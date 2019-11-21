@@ -1,7 +1,7 @@
 import Loadable from "react-loadable";
 import { Loading } from "../components/Loading";
 
-const LOADING_DELAY = 500;
+const LOADING_DELAY = 1000;
 
 const About = Loadable({
   loader: () => import("./About/About"),
