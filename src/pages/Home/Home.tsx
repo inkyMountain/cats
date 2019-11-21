@@ -5,51 +5,47 @@ import Swiper from "swiper";
 import "swiper/dist/css/swiper.min.css";
 import "./styles/Home.scss";
 import "../../typedef.d.ts";
+import TypeButton from "../../components/TypeButton";
 import config from "../../config/index";
-import CategoryButton from "../../components/CategoryButton";
 
 let swiper: Swiper;
 let page = 0;
 let currentUrls: [string];
 let requesting = false;
-let category = "cat";
+let type = "cat";
+let id: number;
 
-async function getAnimalUrls(category: string = "cat") {
+async function getAnimalUrls(type: string = "cat") {
   if (requesting) return;
   requesting = true;
-  const animals = category === "dog" ? await getDogs() : await getCats();
+  const animals = type === "cat" ? await getCats() : await getDogs();
   requesting = false;
-  return animals.map((animal: unknown) =>
-    category === "dog" ? (animal as Dog) : (animal as Cat).url
-  );
+  return animals;
 }
 
+// `https://dog.ceo/api/breeds/image/random/${IMAGE_NUMBER}`
 async function getDogs() {
   const IMAGE_NUMBER = 5;
-  const { data } = await axios.get(
-    `https://dog.ceo/api/breeds/image/random/${IMAGE_NUMBER}`
-    // `http://118.25.185.172/proxy/dog.ceo/api/breeds/image/random/${IMAGE_NUMBER}`
+  const {
+    data
+  } = await axios.get(
+    "https://api.thedogapi.com/v1/images/search?page=1&limit=10",
+    { headers: { "x-api-key": config.apiKeys.dogs } }
   );
-  return data.message;
+  return data.map((dog: any) => dog.url);
 }
 
 async function getCats() {
-  const response = await axios.get(
-    // "http://118.25.185.172/proxy/api.thecatapi.com/v1/images/search",
-    "https://api.thecatapi.com/v1/images/search",
-    {
-      params: {
-        page: page++,
-        limit: 5,
-        type: "small",
-        mime_types: "jpg,png"
-      },
-      headers: {
-        "x-api-key": config.apiKeys.cats
-      }
-    }
-  );
-  return response.data;
+  const params = {
+    limit: 10,
+    type: type,
+    id
+  };
+  const { data } = await axios.get("http://localhost:7000/api/animals", {
+    params
+  });
+  id = data.id;
+  return data.urls;
 }
 
 function initSwiper() {
@@ -61,7 +57,7 @@ function initSwiper() {
 function renderSlides(urls: [string]) {
   const placeholder = <div></div>;
   const slides = urls.map((url: string, index: number) => (
-    <div className="swiper-slide" key={index}>
+    <div className="swiper-slide" key={url}>
       <div
         className="slide-image-background"
         style={{ backgroundImage: `url(${url})` }}
@@ -84,13 +80,14 @@ function renderIcon(icon: string) {
 
 const Home = observer(() => {
   const [urls, setUrls] = useState<[string]>([""]);
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isTypeOpen, setIsTypeOpen] = useState(false);
+  const [loadingVisible, setLoadingVisible] = useState(true);
   currentUrls = urls;
 
-  async function changeCategoryTo(newCategory: string) {
-    setIsCategoryOpen(false);
-    category = newCategory;
-    const urls = await getAnimalUrls(newCategory);
+  async function changeTypeTo(newType: string) {
+    setIsTypeOpen(false);
+    type = newType;
+    const urls = await getAnimalUrls(newType);
     setUrls(urls);
     swiper.slideTo(0, 0);
     swiper.update();
@@ -98,19 +95,18 @@ const Home = observer(() => {
 
   useEffect(() => {
     async function initSlides() {
-      let lastIndex = 0;
-      const urls = await getAnimalUrls(category);
-      const LOAD_MORE_WHEN_REMAIN_IMAGE_IS = 5;
+      const urls = await getAnimalUrls(type);
+      const LOAD_THRESHOLD = 5;
       setUrls(urls);
       swiper = initSwiper();
+      let lastIndex = 0;
       swiper.on("slideChange", async () => {
         const total = swiper.slides.length;
         const current = swiper.activeIndex;
         const needLoading =
-          current > lastIndex &&
-          total - current < 2 + LOAD_MORE_WHEN_REMAIN_IMAGE_IS;
+          current > lastIndex && total - current < 2 + LOAD_THRESHOLD;
         if (needLoading) {
-          const newUrls = await getAnimalUrls(category);
+          const newUrls = await getAnimalUrls(type);
           setUrls(
             (newUrls ? currentUrls.concat(newUrls) : currentUrls) as [string]
           );
@@ -118,9 +114,11 @@ const Home = observer(() => {
         }
         lastIndex = current;
       });
+      swiper.on("resize", () => swiper.update());
+      setLoadingVisible(false);
     }
     initSlides();
-  }, []); // only run once on initializing.
+  }, []); // run once on initializing.
 
   return (
     <div className="home-container">
@@ -128,23 +126,23 @@ const Home = observer(() => {
         <div className="swiper-wrapper">{renderSlides(urls)}</div>
       </div>
 
-      <div className={`category ${isCategoryOpen ? "open" : "close"}`}>
-        <CategoryButton
+      <div className={`animal-type ${isTypeOpen ? "open" : "close"}`}>
+        <TypeButton
           icon="icon-maomao"
-          onChooseCategory={() => changeCategoryTo("cat")}
-        ></CategoryButton>
-        <CategoryButton
+          onChooseType={() => changeTypeTo("cat")}
+        ></TypeButton>
+        <TypeButton
           icon="icon-keji-"
-          onChooseCategory={() => changeCategoryTo("dog")}
-        ></CategoryButton>
+          onChooseType={() => changeTypeTo("dog")}
+        ></TypeButton>
       </div>
-      <div
-        className="category-switcher"
-        onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-      >
-        {category === "dog"
-          ? renderIcon("icon-keji-")
-          : renderIcon("icon-maomao")}
+
+      <div className="type-switcher" onClick={() => setIsTypeOpen(!isTypeOpen)}>
+        {type === "dog" ? renderIcon("icon-keji-") : renderIcon("icon-maomao")}
+      </div>
+
+      <div className={`loading ${loadingVisible ? "" : "hidden"}`}>
+        <div className="anime"></div>
       </div>
     </div>
   );

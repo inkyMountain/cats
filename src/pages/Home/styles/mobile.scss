@@ -36,7 +36,7 @@
     }
   }
 
-  .category {
+  .animal-type {
     position: absolute;
     left: 0;
     top: 0;
@@ -61,7 +61,7 @@
   }
 
   $switcher-size: 35px;
-  .category-switcher {
+  .type-switcher {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -73,6 +73,33 @@
     border-radius: 50%;
     font-size: 40px;
     background-color: whitesmoke;
+  }
+
+  .loading {
+    &.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: all 2s ease;
+    }
+    opacity: 1;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+    .anime {
+      $pikachu-width: 80px;
+      width: $pikachu-width;
+      height: $pikachu-width * 0.7;
+      background-image: url("../../../assets/images/pikachu-loading.gif");
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: 100% 100%;
+    }
   }
 }
 

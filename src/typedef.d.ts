@@ -22,3 +22,5 @@ type Dog = {
 };
 
 type Cats = [Cat];
+
+// export { SearchParams, Cat, Cats, Dog };
