@@ -41,7 +41,7 @@ async function getCats() {
     type: type,
     id
   };
-  const { data } = await axios.get("http://localhost:7000/api/animals", {
+  const { data } = await axios.get("http://118.25.185.172:7001/api/animals", {
     params
   });
   id = data.id;
