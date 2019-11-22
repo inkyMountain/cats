@@ -23,4 +23,9 @@ type Dog = {
 
 type Cats = [Cat];
 
-// export { SearchParams, Cat, Cats, Dog };
+type VirtualData = {
+  from?: number;
+  to?: number;
+  offset?: number;
+  slides: [];
+};
